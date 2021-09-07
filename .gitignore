@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# USER ADDED
+*.sln
+*.zip
+*.pyproj
+
 # User-specific files
 *.rsuser
 *.suo
@@ -338,5 +343,3 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-/pogo.py
-/tt.py
