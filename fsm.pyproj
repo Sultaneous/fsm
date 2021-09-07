@@ -4,7 +4,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>bc1630d0-e464-4719-967a-765cdb961613</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>fsmrle.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -27,6 +28,7 @@
   <ItemGroup>
     <Compile Include="fsm.py" />
     <Compile Include="fsmdemo.py" />
+    <Compile Include="fsmgen.py" />
     <Compile Include="fsmrle.py" />
   </ItemGroup>
   <ItemGroup>

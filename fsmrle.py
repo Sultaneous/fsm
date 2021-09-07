@@ -186,7 +186,7 @@ def doHouseKeeping(context):
    infile=argv[1]
    context.push("infile", infile)
    context.push("infileSize", os.path.getsize(infile))
-   #outfile,_=os.path.splitext(argv[1])
+
    # We keep the file name.  This way we know what the source file is.
    outfile=infile+".rle"
    context.push("outfile", outfile)

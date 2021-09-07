@@ -10,6 +10,11 @@
 
 import inspect
 
+# The context is the state information passed between states.
+# It can contain file pointers, stream data, flags, operational status,
+# etc... whatever is needed for the state execution.  It maintains
+# a dictionary of parameters (set,get) and controls the next state
+# (setNextState, getNextState).
 class Context():
    def __init__(self, contextName):
       self.name = contextName
@@ -46,17 +51,29 @@ class Context():
    def clear(self):
       self.__dict=dict()
 
+   # Provides a JSON formatted list of all stored parameters.
+   # Returns a pretty formatted JSON string.
    def getAll(self):
       properties = []
+      properties.append("{")
       for key, value in self.__dict.items():
-         properties.append(f"'{key}': '{value}'")
-      return(properties)
+         if (isinstance(value, int)):
+            properties.append(f"   '{key}': {value},")
+         else:
+            properties.append(f"   '{key}': '{value}',")
+      # get rid of last comma
+      s=properties.pop()[0:-1]
+      properties.append(s)
+      properties.append("}")
+      s='\n'.join(str(p) for p in properties)
+      return(s)
 
    def count(self):
       return (len(self.__dict))
 
+   # Returns True if key exists and is not None; or for clarity,
+   # returns False if no key, or if is key but value is None.
    def exists(self, key):
-      # Returns true if key exists and is not None
       if (key in self.__dict.keys()):
          if (not self.__dict[key]==None):
             return True
@@ -82,8 +99,7 @@ class State():
       print ("******************************")
       print (f"Exploring Context: {context.name}")
       print (f"Context Items: {context.count()}")
-      for p in context.getAll():
-         print (p)
+      print (context.getAll())
       print ("******************************")
 
       # Done processing, identify next state if any
@@ -125,11 +141,13 @@ def main():
    context=Context("FSM")
    context.set("Author", "Karim Sultan")
    context.set("__NoCaller", "True")
+   context.set("Nonce", 6722301)
    context.setNextState("State")
    dispatcher=Dispatcher()
    dispatcher.dispatch(context)
 
 # End of main
 
+# If module is executed directly...
 if __name__=="__main__":
    main()
