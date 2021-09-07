@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "fsm", "fsm.pyproj", "{BC1630D0-E464-4719-967A-765CDB961613}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8B283110-E31F-45EA-9B0B-63EB814972D8}"
+	ProjectSection(SolutionItems) = preProject
+		data.txt.rle = data.txt.rle
+		urle.py = urle.py
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC1630D0-E464-4719-967A-765CDB961613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1630D0-E464-4719-967A-765CDB961613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D5D2F73-C470-4CAF-BACA-AA4133AD3E51}
+	EndGlobalSection
+EndGlobal
