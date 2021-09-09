@@ -54,6 +54,10 @@ class Context():
    # Provides a JSON formatted list of all stored parameters.
    # Returns a pretty formatted JSON string.
    def getAll(self):
+      # Validate
+      if (self.count()==0):
+         return("")
+
       properties = []
       properties.append("{")
       for key, value in self.__dict.items():
@@ -61,6 +65,7 @@ class Context():
             properties.append(f"   '{key}': {value},")
          else:
             properties.append(f"   '{key}': '{value}',")
+
       # get rid of last comma
       s=properties.pop()[0:-1]
       properties.append(s)
@@ -87,11 +92,12 @@ class Context():
 # THIS CLASS MUST BE DERIVED FROM (EACH FSM STATE)
 # This is the "base state" class which all other states are
 # derived from, and run() must be overridden.
+# NOTE: This is sample code.  Replace as required.
 class State():
    def __init__(self, stateName):
       self.name = stateName;
 
-   # Must be overridend by derived class.
+   # Must be overriden by derived class.
    def run(self, context):
       # This is base class, so simply dump contents
       # of context object.
@@ -104,7 +110,6 @@ class State():
 
       # Done processing, identify next state if any
       context.setNextState(None)
-      print (f"Next state is {context.getNextState()}.")
       return
 
 # End of class State
@@ -137,7 +142,7 @@ class Dispatcher:
 # End of class Dispatcher
 
 # Demo test code
-def main():
+def fsm_main():
    context=Context("FSM")
    context.set("Author", "Karim Sultan")
    context.set("__NoCaller", "True")
@@ -150,4 +155,4 @@ def main():
 
 # If module is executed directly...
 if __name__=="__main__":
-   main()
+  fsm_main()

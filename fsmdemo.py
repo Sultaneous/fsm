@@ -8,6 +8,8 @@
 # August 2021, Karim Sultan
 from fsm import *
 
+# This class just reports it's name, calls the parent class
+# super function to dump conext, and then sets the next state.
 class State1(State):
    def __init__(self, stateName):
       super().__init__(stateName)
@@ -16,8 +18,9 @@ class State1(State):
       print()
       print(f"Currently in {self.name}")
       super().run(context)
-      context.nextState="State2"
-   
+      context.setNextState("State2")
+
+      print (f"Next state is {context.getNextState()}.")
 # End of class State1
 
 # This state uses a key in the context object to manage its
@@ -41,15 +44,17 @@ class State2(State):
 
       # trigger
       if (x<=3):
-         context.nextState = "State1"
+         context.setNextState("State1")
          print (f"{self.name} run() iteration {x} of 3")
          x+=1
       else:
-         context.nextState = None
+         context.setNextState(None)
          context.isDone = True
 
       # update state in context
       context.set("S2I", x)
+
+      print (f"Next state is {context.getNextState()}.")
 # End of class State2
 
 # Only five steps are needed to run the FSM.
@@ -62,7 +67,7 @@ def main():
    context.set("Example", "Demo")
 
    # 2. Identify the first state to instantiate
-   context.nextState="State1"
+   context.setNextState("State1")
 
    # 3. Create our dispatcher
    dispatcher=Dispatcher()
@@ -72,6 +77,7 @@ def main():
 
    # 5. Done
    print("SUCCESS!")
+# End of main
 
 
 if __name__=="__main__":
