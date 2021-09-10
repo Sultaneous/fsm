@@ -7,12 +7,15 @@ import os
 from datetime import datetime
 
 # Generator Data
-# Most generator data must be declared in place, not in advance.
-# This is due to how Python handles format strings; it resolves
+# Most generator is declared in place, not in advance using
+# multi-line strings with {} replacement fields.  Then, when 
+# used, each field is filled using the str.format() function.
+# One cannot declare these as f-strings (f"" or f''') as
+# this is due to how Python handles format strings; it resolves
 # them at declaration, not at run-time usage, so the multi-line
-# strings that use formatting must be declared only after the
-# required variables used in them have been defined.  For shame,
-# Python.
+# strings that use formatting cannot reference any of the
+# required variables used in them before they have been defined.  
+# For shame, Python.
 header='''#!/usr/bin/python3
 
 #################### {} ####################
