@@ -14,6 +14,7 @@ or, if you prefer to be explicit
 
 ```python
 from fsm import Context, State, Dispatcher
+```
 
 ## Contents of this project
 
