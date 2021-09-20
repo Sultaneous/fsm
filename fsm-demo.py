@@ -36,23 +36,25 @@ class State2(State):
    def run(self, context):
       print()
       print(f"Currently in {self.name}")
-      if (context.exists("S2I")):
-         x=context.get("S2I")
+
+      # Retrieve counter; set it if it doesn't exist yet
+      if not context.exists("Counter"):
+         # First access, create and initialize
+         x=0
+         context.set("Counter", x)
       else:
-         x=1
-         context.set("S2I", x)
+         x=context.get("Counter")
 
       # trigger
-      if (x<=3):
+      if (x<3):
          context.setNextState("State1")
-         print (f"{self.name} run() iteration {x} of 3")
-         x+=1
+         print (f"{self.name} run() iteration {x+1} of 3")
       else:
          context.setNextState(None)
-         context.isDone = True
 
-      # update state in context
-      context.set("S2I", x)
+      # increment and store for next time
+      x+=1
+      context.set("Counter", x)
 
       print (f"Next state is {context.getNextState()}.")
 # End of class State2
