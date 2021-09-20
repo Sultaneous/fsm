@@ -296,11 +296,33 @@ Finally, we must clarify which state to transition to on our trigger. According 
 Note that we use the class name, not the humanly readable state name, when setting the next state.  A value of None will cause the state machine to stop
 (gracefully).
 
-### <a id="info_fsm-rle">FSM</a>
+### <a id="info_fsm-rle">FSM-RLE</a>
 
-**TODO: Add documentation for FSM-RLE here**
+The **fsm-rle** utility is a larger example of a slightly more complex, but useful, FSM.  This machine will take a file as input, and will 
+Run-Length-Encode (*RLE*) into a *.rle* output file.  There are many different formats of RLE, so we should first look at what format we will
+be using.
 
-### <a id="info_fsm-gen">FSM</a>
+```C
+0x05, 0x41
+```
+
+...would represent a *run* of 5 bytes, of decimal value 65, hex $41, which is equivalent to an ASCII 'A'.  This would expand to:
+
+```C
+"AAAAA"
+```
+so every byte in the source file is represented in a tuple of 2 bytes, the *run* and the *control* bytes.
+
+As you can no doubt predict, RLE is a poor compression technique for most data sets such as text, emails, etc... but it has its place in raw graphics data
+and even old 6502 memory compression.  However, it is simple to understand, and easy to model in an FSM.
+
+#### Diagram of RLE FSM
+
+The following diagram shows the FSM approach to RLE:
+
+![fsm-rle Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/fsm-rle_diagram.png "FSM-RLE Diagram")
+
+### <a id="info_fsm-gen">FSM-GEN</a>
 
 **TODO: Add documentation for FSM-GEN here**
 
