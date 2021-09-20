@@ -207,14 +207,16 @@ which must be called with a valid Context object.
 
 The demo code is a very simplistic FSM meant to show how to use the fsm engine.  It fulfills the following DFA diagram:
 
+![fsm-demo Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/fsm-demo_diagram.png "FSM-Demo Diagram")
+
 
 
 ### <a id="info_fsm-rle">FSM</a>
 
-**TODO: Add documentation for FSM here**
+**TODO: Add documentation for FSM-RLE here**
 
 ### <a id="info_fsm-gen">FSM</a>
 
-**TODO: Add documentation for FSM here**
+**TODO: Add documentation for FSM-GEN here**
 
 
