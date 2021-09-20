@@ -177,15 +177,15 @@ of properties.
 | Method | Alias(es) | Parameters | Returns | Summary |
 |:-----|:---------|:--------|:-------|:-------|
 | `__init__`() | None | string contextName | Class instance | The default constructor takes one parameter, which is typically the name of the FSM being implemented. |
-| set() | push(), put() | string key, var value| nothing | Puts a property (*Key=value*) into the context dictionary. |
-| get() | peek(), pop() | string key | value, or *None* | Retrieves key value, if key exists; else returns *None*. |
-| delete() | None | string key | nothing | If the key exists in dictionary, deletes it (and value). |
-| clear() | None | None | nothing | Deletes all keys and resets context dictionary to empty. |
-| getAll() | None | None | string JSON formatted object of all key=value properties, if any. | Creates a JSON representation of the context properties. |
-| setNextState() | None | string className | The name of the class to instantiate and invoke (via *run()*) for the next state. |
-| getNextState() | None | None | Returns the name of the class for the next state, if any is defined. | Should be defined by *setNextState()* first. |
-| count() | None | None | int Number of properties in the context dictionary. | Executes *len(self.`__dict`)*. |
-| exists() | None | string key | True if key exists, False otherwise. | **NOTE**: Returns True if key exists and value is *None*. |
+| `set()` | `push()`, `put()` | string key, var value| nothing | Puts a property (*Key=value*) into the context dictionary. |
+| `get()` | `peek()`, `pop()` | string key | value, or *None* | Retrieves key value, if key exists; else returns *None*. |
+| `delete()` | None | string key | nothing | If the key exists in dictionary, deletes it (and value). |
+| `clear()` | None | None | nothing | Deletes all keys and resets context dictionary to empty. |
+| `getAll()` | None | None | string JSON object | Creates a JSON representation of the context properties, if any. |
+| `setNextState()` | None | string className | nothing | The name of the class to instantiate and invoke (via *run()*) for the next state. |
+| `getNextState()` | None | None | string className | Returns the name of the class for the next state, if any is defined. Should be defined by *setNextState()* first. |
+| `count()` | None | None | int numProperties | Returns the number of properties in the context dictionary. Executes *`len(self.__dict`)*. |
+| `exists()` | None | string key | boolean doesExist | True if key exists, False otherwise. **NOTE**: Returns True if key exists and value is *None*. |
 
 ### <a id="info_StateClass">State Class</a>
 
@@ -195,7 +195,7 @@ The **State Class** is the base class you must:
 
 | Method | Parameters | Returns | Summary |
 |:-----|:--------|:-------|:-------|
-| `__init_-` | stateName | Class instance | The constructor requires a human readable name for the state, and it must call **super()**.  See [here](#CodingState) for more info. |
+| `__init__`() | stateName | Class instance | The constructor requires a human readable name for the state, and it must call **super()**.  See [here](#CodingState) for more info. |
 | run() | Context object | nothing | You must override this function with your logic, and set the next state as required.  See [here](#CodingState) for more info. |
 
 **NOTE:** The property key *`__NoCaller`* is a reserved key and **must not** be used by your program.  It is a boolean directive for the dispatcher, for when
@@ -256,7 +256,7 @@ while the state name is for your reference.
 
 #### State2: STATE_ITERATE
 
-According to the diagram, State2 is meant to occur three times.  It will go back to State1 each time, until a counter 'x' reaches 3, at which point it will
+According to the diagram, State2 is meant to occur three times.  It will go back to State1 each time, until a counter **x** reaches 3, at which point it will
 proceed to the end instead.
 
 State objects are scoped **locally**; this means all variables within it are lost when the state transitions to another state.  This is by **design**, as FSMs are not
@@ -265,22 +265,22 @@ Any previous instances will be **disposed** of by Python garbage collection.  Th
 time it is invoked.
 
 But if States are stateless, how can we count how many iterations State2 has executed?  This is where the **Context** comes in.  We store whatever information
-we need to persist within the context. In this case, we store a counter value; we initialize it to 0 if it doesn't already exist (first access) and increment
-it by 1 if it does exist:
+we need to persist within the context. In this case, we store a counter value; we initialize it to `0` if it doesn't already exist (first access) and increment
+it by `1` if it does exist:
 
 ```python
-   if not context.exists("counter"):
+   if not context.exists("Counter"):
       # First access, create and initialize
       x=0
-      context.set("counter", x)
+      context.set("Counter", x)
    else:
-      x=context.get("counter")
+      x=context.get("Counter")
       
    # ... do operation
    
    # increment and store for next time
    x+=1
-   context.set("counter", x)
+   context.set("Counter", x)
 ```
 
 Finally, we must clarify which state to transition to on our trigger. According to the diagram, the trigger is based on the value of x:
