@@ -52,6 +52,8 @@ Using the FSM module is simple.
 #### Part 1 -> Create an FSM Diagram
 Before starting to code, you should create a diagram containing each state, their triggers and which states they transition to.
 
+![Example FSM Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/example_FSM_diagram.png "Example FSM Diagram")
+
 #### Part 2 -> Convert FSM Diagram to code
 1. You create a class based on **State** base class:
 ```python
@@ -64,7 +66,7 @@ class MyState(State):
       super().__init__(stateName)
 ```
 
-2. You *8override the run() function** and provide your logic for this specific state:
+2. You **override the run() function** and provide your logic for this specific state:
 ```python
    def run(context):
       # TODO: Replace this with your logic
