@@ -21,9 +21,9 @@ from fsm import Context, State, Dispatcher
 | Module | Classes | Summary |
 | :------ | :------- | :-------|
 |[fsm](#info_fsm) | Context, State, Dispatcher | Contains the a DFA engine for Finit State Machines. |
-|| Context | Provides a transitory, globally accessible store for state information. |
-|| State | A base FSM State class which must be inherited and have its run() method overriden with your logic. |
-|| Dispatcher | The actual engine which invokes the correct states to execute the machine. |
+|| [Context](#info_ContextClass) | Provides a transitory, globally accessible store for state information. |
+|| [State](#info_StateClass) | A base FSM State class which must be inherited and have its run() method overriden with your logic. |
+|| [Dispatcher](#info_DispatcherClass) | The actual engine which invokes the correct states to execute the machine. |
 |[fsm-demo](#info_fsm-demo) | | A simple code example for using the FSM module. |
 |[fsm-rle](#info_fsm-rle) | | A more complex, purposeful example of using the FSM module, which acts as a utility for Run-Length Encoding. |
 |[fsm-gen](#info_fsm-gen) | | A powerful command line utility for automatic code template generation for your DFA as an FSM.  |
@@ -52,6 +52,8 @@ Using the FSM module is simple.
 #### Part 1 -> Create an FSM Diagram
 Before starting to code, you should create a diagram containing each state, their triggers and which states they transition to.
 
+The following diagram is an example only.  Later, we will design a diagram for a basic network handshake protocol, and convert it to an FSM machine
+using **fsm-gen**.
 ![Example FSM Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/example_FSM_diagram.png "Example FSM Diagram")
 
 #### Part 2 -> Convert FSM Diagram to code
@@ -99,7 +101,7 @@ class State1(State):
 # End of class State1
 ```
 
-#### Part 3 -> 5 Step Main()
+#### Part 3 -> The 5 Step main()
 Starting the FSM is simple.  There are 5 required steps:
 1. Create the context object.  Populate it with any required initial values.
 ```python
@@ -166,9 +168,47 @@ if __name__=="__main__":
 If you are creating FSMs, it is highly recommended you use the [fsm-gen](#info_fsm-gen) utility. It will build the scaffolding and you will need only to
 enter your state logic in each appropriate derived State class. It is recommended to use the fsm-gen tool once you have completed your FSM diagram.
 
+### <a id="info_ContextClass">Context Class</a>
+
+The **Context Class** is used to create context information for the FSM - contextual data for each state, which can be shared with other states.
+Each state is considered independent. Persistent (global) information must be passed to it through the context object, which at its core is a dictionary
+of properties.
+
+| Method | Alias(es) | Parameters | Returns | Summary |
+|:-----|:---------|:--------|:-------|:-------|
+| __init__() | None | string contextName | Class instance | The default constructor takes one parameter, which is typically the name of the FSM being implemented. |
+| set() | push(), put() | string key, var value| nothing | Puts a property (*Key=value*) into the context dictionary. |
+| get() | peek(), pop() | string key | value, or *None* | Retrieves key value, if key exists; else returns *None*. |
+| delete() | None | string key | nothing | If the key exists in dictionary, deletes it (and value). |
+| clear() | None | None | nothing | Deletes all keys and resets context dictionary to empty. |
+| getAll() | None | None | string JSON formatted object of all key=value properties, if any. | Creates a JSON representation of the context properties. |
+| setNextState() | None | string className | The name of the class to instantiate and invoke (via *run()*) for the next state. |
+| getNextState() | None | None | Returns the name of the class for the next state, if any is defined. | Should be defined by *setNextState()* first. |
+| count() | None | None | int Number of properties in the context dictionary. | Executes *len(self.__dict)*. |
+| exists() | None | string key | True if key exists, False otherwise. | **NOTE**: Returns True if key exists and value is *None*. |
+
+### <a id="info_StateClass">State Class</a>
+
+The **State Class** is 
+
+| Method | Parameters | Returns | Summary |
+|:-----|:--------|:-------|:-------|
+
+### <a id="info_DispatcherClass">Dispatcher Class</a>
+
+The **Dispatcher Class** is the engine of the FSM, which invokes and switches States as required based on triggers. It has only one method, **dispatch()**,
+which must be called with a valid Context object.
+
+| Method | Parameters | Returns | Summary |
+|:-----|:--------|:-------|:-------|
+| dispatch() | Context object | nothing | When provided a valid context object, will determine the correct python pathing to the required derived State class
+to instantiate, and execute the finite state machine. |
+
 ### <a id="info_fsm-demo">FSM</a>
 
-**TODO: Add documentation for FSM here**
+The demo code is a very simplistic FSM meant to show how to use the fsm engine.  It fulfills the following DFA diagram:
+
+
 
 ### <a id="info_fsm-rle">FSM</a>
 
