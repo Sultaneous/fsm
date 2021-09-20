@@ -56,7 +56,7 @@ The following diagram is an example only.  Later, we will design a diagram for a
 using **fsm-gen**.
 ![Example FSM Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/example_FSM_diagram.png "Example FSM Diagram")
 
-#### <a id="#CodingState">Part 2 -> Convert FSM Diagram to code</a>
+#### <a id="CodingState">Part 2 -> Convert FSM Diagram to code</a>
 1. You create a class based on **State** base class:
 ```python
 class MyState(State):
@@ -176,7 +176,7 @@ of properties.
 
 | Method | Alias(es) | Parameters | Returns | Summary |
 |:-----|:---------|:--------|:-------|:-------|
-| `__init__`() | None | string contextName | Class instance | The default constructor takes one parameter, which is typically the name of the FSM being implemented. |
+| `__init__()` | None | string contextName | Class instance | The default constructor takes one parameter, which is typically the name of the FSM being implemented. |
 | `set()` | `push()`, `put()` | string key, var value| nothing | Puts a property (*Key=value*) into the context dictionary. |
 | `get()` | `peek()`, `pop()` | string key | value, or *None* | Retrieves key value, if key exists; else returns *None*. |
 | `delete()` | None | string key | nothing | If the key exists in dictionary, deletes it (and value). |
@@ -195,8 +195,8 @@ The **State Class** is the base class you must:
 
 | Method | Parameters | Returns | Summary |
 |:-----|:--------|:-------|:-------|
-| `__init__`() | stateName | Class instance | The constructor requires a human readable name for the state, and it must call **super()**.  See [here](#CodingState) for more info. |
-| run() | Context object | nothing | You must override this function with your logic, and set the next state as required.  See [here](#CodingState) for more info. |
+| `__init__()` | stateName | Class instance | The constructor requires a human readable name for the state, and it must call **super()**.  See [here](#CodingState) for more info. |
+| `run()` | Context object | nothing | You must override this function with your logic, and set the next state as required.  See [here](#CodingState) for more info. |
 
 **NOTE:** The property key *`__NoCaller`* is a reserved key and **must not** be used by your program.  It is a boolean directive for the dispatcher, for when
 the dispatcher is called from within fsm versus from within your module.
@@ -208,7 +208,7 @@ which must be called with a valid Context object.
 
 | Method | Parameters | Returns | Summary |
 |:-----|:--------|:-------|:-------|
-| dispatch() | Context object | nothing | When provided a valid context object, will determine the correct python pathing to the required derived State class to instantiate, and execute the finite state machine. |
+| `dispatch()` | Context object | nothing | When provided a valid context object, will determine the correct python pathing to the required derived State class to instantiate, and execute the finite state machine. |
 
 In Python, a module has access to the classes in itself, and any classes it imported. You may wonder, if the fsm module doesn't import your module, how can
 it invoke classes from it?  This is indeed the problem, which the dispatcher solves.  We take advantage of the interpreted nature of Python, and use reflection
