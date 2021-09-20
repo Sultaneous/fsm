@@ -201,8 +201,7 @@ which must be called with a valid Context object.
 
 | Method | Parameters | Returns | Summary |
 |:-----|:--------|:-------|:-------|
-| dispatch() | Context object | nothing | When provided a valid context object, will determine the correct python pathing to the required derived State class
-to instantiate, and execute the finite state machine. |
+| dispatch() | Context object | nothing | When provided a valid context object, will determine the correct python pathing to the required derived State class to instantiate, and execute the finite state machine. |
 
 ### <a id="info_fsm-demo">FSM</a>
 
