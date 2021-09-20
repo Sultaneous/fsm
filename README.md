@@ -56,7 +56,7 @@ The following diagram is an example only.  Later, we will design a diagram for a
 using **fsm-gen**.
 ![Example FSM Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/example_FSM_diagram.png "Example FSM Diagram")
 
-#### Part 2 -> Convert FSM Diagram to code
+#### <a id="#CodingState">Part 2 -> Convert FSM Diagram to code</a>
 1. You create a class based on **State** base class:
 ```python
 class MyState(State):
@@ -176,7 +176,7 @@ of properties.
 
 | Method | Alias(es) | Parameters | Returns | Summary |
 |:-----|:---------|:--------|:-------|:-------|
-| __init__() | None | string contextName | Class instance | The default constructor takes one parameter, which is typically the name of the FSM being implemented. |
+| `__init__`() | None | string contextName | Class instance | The default constructor takes one parameter, which is typically the name of the FSM being implemented. |
 | set() | push(), put() | string key, var value| nothing | Puts a property (*Key=value*) into the context dictionary. |
 | get() | peek(), pop() | string key | value, or *None* | Retrieves key value, if key exists; else returns *None*. |
 | delete() | None | string key | nothing | If the key exists in dictionary, deletes it (and value). |
@@ -184,15 +184,22 @@ of properties.
 | getAll() | None | None | string JSON formatted object of all key=value properties, if any. | Creates a JSON representation of the context properties. |
 | setNextState() | None | string className | The name of the class to instantiate and invoke (via *run()*) for the next state. |
 | getNextState() | None | None | Returns the name of the class for the next state, if any is defined. | Should be defined by *setNextState()* first. |
-| count() | None | None | int Number of properties in the context dictionary. | Executes *len(self.__dict)*. |
+| count() | None | None | int Number of properties in the context dictionary. | Executes *len(self.`__dict`)*. |
 | exists() | None | string key | True if key exists, False otherwise. | **NOTE**: Returns True if key exists and value is *None*. |
 
 ### <a id="info_StateClass">State Class</a>
 
-The **State Class** is 
+The **State Class** is the base class you must:
+1. Derive your state class from, and
+2. Override the *run()* method, implementing your logic for that state. See [here](#CodingState) for more info.
 
 | Method | Parameters | Returns | Summary |
 |:-----|:--------|:-------|:-------|
+| `__init_-` | stateName | Class instance | The constructor requires a human readable name for the state, and it must call **super()**.  See [here](#CodingState) for more info. |
+| run() | Context object | nothing | You must override this function with your logic, and set the next state as required.  See [here](#CodingState) for more info. |
+
+**NOTE:** The property key *`__NoCaller`* is a reserved key and **must not** be used by your program.  It is a boolean directive for the dispatcher, for when
+the dispatcher is called from within fsm versus from within your module.
 
 ### <a id="info_DispatcherClass">Dispatcher Class</a>
 
@@ -203,13 +210,91 @@ which must be called with a valid Context object.
 |:-----|:--------|:-------|:-------|
 | dispatch() | Context object | nothing | When provided a valid context object, will determine the correct python pathing to the required derived State class to instantiate, and execute the finite state machine. |
 
+In Python, a module has access to the classes in itself, and any classes it imported. You may wonder, if the fsm module doesn't import your module, how can
+it invoke classes from it?  This is indeed the problem, which the dispatcher solves.  We take advantage of the interpreted nature of Python, and use reflection
+to examine the module of the calling function.  From this, we can determine a proper Python path to out-of-module State Class, create a reference to it 
+(a type of class pointer), and then instantiate the class from this reference:
+
+```python
+      if context.exists("__NoCaller"):
+         caller_globals = globals()
+      else:
+         caller_globals = dict(inspect.getmembers(inspect.stack()[1][0]))["f_globals"]
+      while (context.getNextState()!=None):
+         klass = caller_globals[context.getNextState()]
+         s=klass(context.getNextState())
+         s.run(context)
+      return
+```
+
+**NOTE:** As mentioned above, *`__NoCaller`* is a reserved key; if we are invoking *dispatch()* from within the fsm module (done in test cases), then
+we can not look for caller class information as there is none and the class is already in scope.
+
 ### <a id="info_fsm-demo">FSM</a>
 
 The demo code is a very simplistic FSM meant to show how to use the fsm engine.  It fulfills the following DFA diagram:
 
 ![fsm-demo Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/fsm-demo_diagram.png "FSM-Demo Diagram")
 
+#### State1: STATE_SHOWCONTEXT
 
+State1 is as simple a state that we can make.  It overrides *run()* to report what state the machine is in, then calls the *super()* which by default, prints out the contents of the context in JSON format,
+and finally, it sets the next state to invoke:
+
+```python
+   def run(self, context):
+      print()
+      print(f"Currently in {self.name}.")
+      super().run(context)
+      context.setNextState("State2")
+
+      print (f"Next state is {context.getNextState()}.")
+```
+
+**NOTE:** When setting the next state, one **must** use the state's Class name, not it's humanly readable state name.  The class name is for the machine; 
+while the state name is for your reference.
+
+#### State2: STATE_ITERATE
+
+According to the diagram, State2 is meant to occur three times.  It will go back to State1 each time, until a counter 'x' reaches 3, at which point it will
+proceed to the end instead.
+
+State objects are scoped **locally**; this means all variables within it are lost when the state transitions to another state.  This is by **design**, as FSMs are not
+meant to be **stateful** (ie, States are **stateless** by nature).  To ensure this, the dispatcher creates a **new instance** of the State class each time it is entered.
+Any previous instances will be **disposed** of by Python garbage collection.  This also prevents hard to debug programming errors - all settings for a State instance are new each
+time it is invoked.
+
+But if States are stateless, how can we count how many iterations State2 has executed?  This is where the **Context** comes in.  We store whatever information
+we need to persist within the context. In this case, we store a counter value; we initialize it to 0 if it doesn't already exist (first access) and increment
+it by 1 if it does exist:
+
+```python
+   if not context.exists("counter"):
+      # First access, create and initialize
+      x=0
+      context.set("counter", x)
+   else:
+      x=context.get("counter")
+      
+   # ... do operation
+   
+   # increment and store for next time
+   x+=1
+   context.set("counter", x)
+```
+
+Finally, we must clarify which state to transition to on our trigger. According to the diagram, the trigger is based on the value of x:
+
+```python
+   # Evaluate x to set next state
+   if (x<3):
+      context.setNextState(State1)
+   else:
+      context.setNextState(None)
+```
+
+Note that we use the class name, not the humanly readable state name, when setting the next state.  A value of None will cause the state machine to stop
+(gracefully).
 
 ### <a id="info_fsm-rle">FSM</a>
 
