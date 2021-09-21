@@ -29,6 +29,8 @@ from fsm import Context, State, Dispatcher
 |[fsm-gen](#info_fsm-gen) | | A powerful command line utility for automatic code template generation for your DFA as an FSM.  |
 | urle | | A simple command line utility to expand RLE archives. |
 
+You can review the explanatory API documentation, or learn how to build an FSM quickly with the code generator tool via the **[Workshop Tutorial](#Workshop)**.
+
 ## API Documentation
 
 ### <a id="info_fsm">FSM</a>
@@ -54,6 +56,7 @@ Before starting to code, you should create a diagram containing each state, thei
 
 The following diagram is an example only.  Later, we will design a diagram for a basic network handshake protocol, and convert it to an FSM machine
 using **fsm-gen**.
+
 ![Example FSM Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/example_FSM_diagram.png "Example FSM Diagram")
 
 #### <a id="CodingState">Part 2 -> Convert FSM Diagram to code</a>
@@ -327,13 +330,93 @@ There is also a simple utility program, **urle.py**, which will decompress an RL
 Armed with the above information, you are prepped to review [the code](https://github.com/Sultaneous/fsm/blob/master/fsm-rle.py) and see how easy it is to make this slightly more complicated
 DFA using the **fsm engine**.
 
-### <a id="info_fsm-gen">FSM-GEN and a Step-by-Step Tutorial Workshop</a>
+
+# <a id="Workshop">Step-by-Step Tutorial Workshop for Building FSMs with FSM-GEN</a>
+## <a id="info_fsm-gen">FSM-GEN</a>
 
 **TODO: Add documentation for FSM-GEN here**
-This section will show how to use the fsm-gen tool.  We will step through an example state machine for an imaginary protocol; create the corresponding
-FSM Diagram, implement the custom State logic, and build a fully functional FSM program.  This section is meant to serve as a hands-on workshop tutorial only.
+This section will show how to use the fsm-gen tool.  We will step through an example
+state machine for an imaginary protocol; create the corresponding FSM Diagram, 
+implement the custom State logic, and build a fully functional FSM program.  
+*This section is meant to serve as a hands-on workshop tutorial only.*
 
-** Part 1 / 3 coming Tuesday Sep 21 **
+The utility fsm-gen.py is a template code generator. It will collect parameters from
+you, which it will then use to output a functional Python program.  You will then
+need to edit the code template and insert your specific state logic.
+
+This workshop will take you step-by-step through the process of building an FSM
+using the Gamzia fsm module.
+
+### STEP 1: Use Case
+
+For our use case, we will consider a bogus network interaction between computers.
+Computers communicate using protocols. We introduce the following simple protocol
+and rules:
+
+**START**
+Client connects to server.
+**Server:** HELLO *"Respond with email address"*
+**Client:** *<email address>*
+**Server:** DATA *"Ready to receive"
+**Client:** *<any data>*
+**Server:** BYE *<client email>*
+**END**
+
+### STEP 2: Describe the states
+
+**INIT_STATE**
+- sets @email to "Unknown"
+- sets @errors to 0
+- sets @maxerrors to 3
+- sets @data o ""
+- Triggers on completion, transitions to HELLO_STATE
+
+
+**HELLO_STATE**
+- prints "HELLO 'Respond with email address'"
+- gets input into @email
+- rough validates @email value
+- Trigger: bad email, transitions to INVALID_EMAIL_STATE
+- Trigger: good email, transitions to DATA_STATE
+
+
+**INVALID_EMAIL_STATE**
+- reports invalid email, counts errors
+- increments @errors 
+- Trigger: if @errors >= @maxerrors, transitions to TERMINATION_STATE
+- else transitions: HELLO_STATE
+
+
+**DATA_STATE**
+- prints "DATA 'Ready to receive'"
+- prompts for a line of text data (EOL terminated) input into @data
+- Trigger: if bad @data, transition to INVALID_DATA_STATE;
+- else, transition to LOG_STATE
+
+
+**INVALID_DATA_STATE**
+- reports invalid, counts instances
+- increments errors
+- Trigger: if @errors >= @maxerrors, transitions to TERMINATION_STATE
+- Transitions to DATA_STATE
+
+
+**LOG_STATE**
+- writes the data to an outfile
+- reports results
+- Transitions to TERMINATION_STATE
+
+
+**TERMINATION_STATE**
+- prints "BYE '@email'"
+- ends / signals FSM to exit
+
+
+### STEP 3: Create FSM Diagram
+
+The following state diagram visualizes the logic outlined for the use case:
+
+**TODO: Add png of FSM diagram***
 
 ** Part 2 / 3 coming Thursday Sep 23 **
 
