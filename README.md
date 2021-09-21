@@ -322,8 +322,16 @@ The following diagram shows the FSM approach to RLE:
 
 ![fsm-rle Diagram](https://github.com/Sultaneous/fsm/blob/master/assets/fsm-rle_diagram.png "FSM-RLE Diagram")
 
+There is also a simple utiltiy program, **urle.py**, which will decompress an RLE encoded file back to its orginal size.
+
 ### <a id="info_fsm-gen">FSM-GEN</a>
 
 **TODO: Add documentation for FSM-GEN here**
+This section will show how to use the fsm-gen tool.  We will step through an example state machine for an imaginary protocol; create the corresponding
+FSM Diagram, implement the custom State logic, and build a fully functional FSM program.  This section is meant to serve as a hands-on workshop tutorial only.
 
+** Part 1 / 3 coming Tuesday Sep 21 **
 
+** Part 2 / 3 coming Thursday Sep 23 **
+
+** Part 3 / 3 coming Saturday Sep 25 **
