@@ -334,7 +334,6 @@ DFA using the **fsm engine**.
 # <a id="Workshop">Step-by-Step Tutorial Workshop for Building FSMs with FSM-GEN</a>
 ## <a id="info_fsm-gen">FSM-GEN</a>
 
-**TODO: Add documentation for FSM-GEN here**
 This section will show how to use the fsm-gen tool.  We will step through an example
 state machine for an imaginary protocol; create the corresponding FSM Diagram, 
 implement the custom State logic, and build a fully functional FSM program.  
@@ -347,22 +346,22 @@ need to edit the code template and insert your specific state logic.
 This workshop will take you step-by-step through the process of building an FSM
 using the Gamzia fsm module.
 
-### STEP 1: Use Case
+### STEP 1: Use Case  
 
 For our use case, we will consider a bogus network interaction between computers.
 Computers communicate using protocols. We introduce the following simple protocol
-and rules:
+and rules, which we will call the MUD (Mislead, Useless Design) Protocol:
 
-**START**
-Client connects to server.
-**Server:** HELLO *"Respond with email address"*
-**Client:** *<email address>*
-**Server:** DATA *"Ready to receive"
-**Client:** *<any data>*
-**Server:** BYE *<client email>*
-**END**
+**START**  
+*Client connects to server.*  
+**Server:** HELLO *"Respond with email address"*  
+**Client:** *\<email address\>*  
+**Server:** DATA *"Ready to receive"  
+**Client:** *\<any data\>*  
+**Server:** BYE *\<client email\>*  
+**END**  
 
-### STEP 2: Describe the states
+### STEP 2: Describe the states 
 
 **INIT_STATE**
 - sets @email to "Unknown"
@@ -416,7 +415,8 @@ Client connects to server.
 
 The following state diagram visualizes the logic outlined for the use case:
 
-**TODO: Add png of FSM diagram***
+![fsm-mud diagram](https://github.com/Sultaneous/fsm/blob/master/assets/fsm-mud_diagram.png "FSM-MUD Diagram") 
+
 
 ** Part 2 / 3 coming Thursday Sep 23 **
 
