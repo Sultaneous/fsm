@@ -417,7 +417,141 @@ The following state diagram visualizes the logic outlined for the use case:
 
 ![fsm-mud diagram](https://github.com/Sultaneous/fsm/blob/master/assets/fsm-mud_diagram.png "FSM-MUD Diagram") 
 
+### STEP 4: Run fsm-gen.py
 
-** Part 2 / 3 coming Thursday Sep 23 **
+NOTE: The python script fsm-gen.py does not need any command line arguments.
+A future version will allow for automation; however at the time of this writing,
+the utility program is interactive only.
+
+It will prompt you for information about your FSM and will output a functional
+code template.  This template will run immediately, but will not do anything
+of significance until you code your own logic into each appropriate state class.
+
+```bash
+> python fsm-gen.py
+```
+
+To replicate our MUD FSM in fsm-gen, answer the prompts as follows:
+
+```bash
+Welcome to FSM Template Generator for the Python FSM module.
+By Karim Sultan, September 2021.
+
+This utility will ask a few questions about your DFA / FSM and will generate
+a code template.  This is the interactive version.
+
+1. Name of outfile: mud.py
+Writing to source file: "mud.py"
+
+2. Number of states? (1-100) 7
+Generating 7 states.
+
+3. Would you like to name the states (tag or brief description)? [y/n] <y> y
+Name for State 1: INIT_STATE
+Name for State 2: HELLO_STATE
+Name for State 3: INVALID_EMAIL_STATE
+Name for State 4: DATA_STATE
+Name for State 5: INVALID_DATA_STATE
+Name for State 6: LOG_STATE
+Name for State 7: TERMINATION_STATE
+The state names are:
+INIT_STATE
+HELLO_STATE
+INVALID_EMAIL_STATE
+DATA_STATE
+INVALID_DATA_STATE
+LOG_STATE
+TERMINATION_STATE
+
+4. Will you use command line parameters? [y/n] <y> y
+Using command line parameters: True
+
+5. Do you want to show syntax for usage? [y/n] <y> y
+Show usage syntax on no parameters: True
+
+6. What is the name of this app?  <Mud>
+Using app name of "Mud"
+
+7. What is the author's name? <Unknown> Sultaneous
+Using author name of "Sultaneous"
+
+Ready to produce summary.  Hit <enter> to continue... [y] <y> y
+
+8. Summary
+App name: "Mud" by "Sultaneous"
+Writing to source file: "mud.py"
+Generating 7 states.
+  1.  State1:   INIT_STATE
+  2.  State2:   HELLO_STATE
+  3.  State3:   INVALID_EMAIL_STATE
+  4.  State4:   DATA_STATE
+  5.  State5:   INVALID_DATA_STATE
+  6.  State6:   LOG_STATE
+  7.  State7:   TERMINATION_STATE
+Requires use of command line parameters: True
+Show usage syntax when no parameters: True
+
+I am now ready to generate a python code template.
+Do you wish me to begin?  [y/n] <y> y
+SUCCESS!
+```
+
+**NOTES:**  
+1. Step 1 is the **file name** of the python file to generate.  If it exists you will be
+prompted to allow overwrite.  
+2. Step 2 is the **number of states** in our FSM.  The diagram shows 7.  
+3. Step 3 allows you to **name the states**.  If you select 'n', then the states are
+given unique but generic names.  We will select 'y' as we want to identify our
+states as per our diagram.  
+    1. We are now **prompted to name each state**; we replicate the names from the
+diagram.  
+4. The generator can add code to collect the **command line arguments** for us into
+argc and args\[\].  We will select yes in case we want to extend this template
+further (for example, provide the log file name on the command line).
+5. The show syntax option is only available if we choose to use command line
+arguments.  It will provide a **blurb on syntax** when the program is executed
+without parameters.
+6. The **name of the app** is the name of the FSM, set in the context, used by the
+engine.
+7. Enter **your name**.
+8. This is a **summary** step which **reports** what will be built.  Answer 'y' to
+generate the template, or enter 'n' to abort (**all entries will be lost**).
+If you enter 'n' you will be asked to confirm.
+
+You can now validate everything worked properly by executing the template:
+
+```bash
+> python mud.py
+
+Mud by Sultaneous, September 21, 2021
+<Explain purpose>
+Syntax: mud.py <mandatory params> ... [optional params] ...
+```
+
+Ok, we requested the use of command line arguments, even though we don't really
+need them.  So since we didn't provide any, mud just shows the syntax and exits.
+We can get around this by giving it a dummy argument.
+
+```bash
+> python mud.py dummy_parameter
+
+Currently in INIT_STATE
+Currently in HELLO_STATE
+Currently in INVALID_EMAIL_STATE
+Currently in DATA_STATE
+Currently in INVALID_DATA_STATE
+Currently in LOG_STATE
+Currently in TERMINATION_STATE
+SUCCESS!
+```
+
+That's better.  This time, the state machine was executed, and the default
+behaviour of each generated template is to just report its state name, and then
+proceed to the next state.  This has the effect of enumerating our states,
+but it doesn't do anything useful yet.
+
+### STEP 5: Add Your Logic
+
+Time to code up.
 
 ** Part 3 / 3 coming Saturday Sep 25 **
