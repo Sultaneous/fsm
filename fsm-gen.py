@@ -197,17 +197,23 @@ def produceSummary(responses):
    prompt("Ready to produce summary.  Hit <enter> to continue...", ['y'], 'y', 'y')
 
    # Summary and confirm step
-   print()
-   print("8. Summary")
-   print(f"App name: \"{responses['appName']}\" by \"{responses['author']}\"")
-   print(f"Writing to source file: \"{responses['outfile']}\"")
-   print(f"Generating {responses['numStates']} states.")
+   report="\n"
+   report+="8. Summary\n"
+   report+=f"App name: \"{responses['appName']}\" by \"{responses['author']}\"\n"
+   report+=f"Writing to source file: \"{responses['outfile']}\"\n"
+   report+=f"Generating {responses['numStates']} states.\n"
    if not responses["stateNames"]==None:
       for i in range(len(responses['stateNames'])):
-         print(f" {i+1:2}.  State{i+1}:   {responses['stateNames'][i]}")
-   print(f"Requires use of command line parameters: {responses['hasCLParameters']}")
-   print(f"Show usage syntax when no parameters: {responses['hasSyntax']}")
-   print()
+         report+=f" {i+1:2}.  State{i+1}:   {responses['stateNames'][i]}\n"
+   report+=f"Requires use of command line parameters: {responses['hasCLParameters']}\n"
+   report+=f"Show usage syntax when no parameters: {responses['hasSyntax']}\n"
+   report+="\n"
+   print(report)
+
+   # Save report
+   file = open(responses["outfile"]+".report", "w+")
+   file.write(report)
+   file.close()
 
    print("I am now ready to generate a python code template.")
    if not prompt("Do you wish me to begin? ", ['y','n'], 'y', 'y'):
