@@ -598,13 +598,13 @@ can refer to states using the human labels:
  ```
  
  - "email" is given a temporary value in case FSM terminates early
- - once are required shared variables are initialized, we transition automatically
- to HELLO_STATE (as per the diagram).
+ - once our required shared variables are initialized, we transition automatically
+ to **HELLO_STATE** (as per the diagram).
  
  #### State2: HELLO_STATE
  
- The HELLO_STATE issues the HELLO protocol command, and reads input. It also
- perform's a poor-man's "validation" of the email.
+ The **HELLO_STATE** issues the HELLO protocol command, and reads input. It also
+ performs a poor-man's "validation" of the email.
  
  ```python
  class State2(State):
@@ -629,8 +629,8 @@ can refer to states using the human labels:
 # End of class State2
 ```
 
-- if email doesn't pass test, then we transition to INVALID_EMAIL_STATE
-- if email is ok, reset error counter, store email, and transition to DATA_STATE
+- if email doesn't pass test, then we transition to **INVALID_EMAIL_STATE**
+- if email is ok, reset error counter, store email, and transition to **DATA_STATE**
 
 #### State3: INVALID_EMAIL_STATE
 
@@ -656,8 +656,8 @@ class State3(State):
 # End of class State3
 
 ```
-- if less than max errors, transitions back to HELLO_STATE and repeats.
-- if maxErrors (3) exceeded, it transitions to TERMINATION_STATE.
+- if less than max errors, transitions back to **HELLO_STATE** and repeats.
+- if maxErrors (3) exceeded, it transitions to **TERMINATION_STATE**.
 
 #### State 4: DATA_STATE
 
@@ -689,9 +689,9 @@ str.strip() to test for this)
 
 #### State5: INVALID_DATA_STATE
 
-This state is very similar to INVALID_EMAIL_STATE.  For this workshop, we are 
+This state is very similar to **INVALID_EMAIL_STATE**.  For this workshop, we are 
 being explicit, but perhaps you can envision how both these states could be
-generalized into a single INVALID_INPUT_STATE.  There are always multiple ways
+generalized into a single **INVALID_INPUT_STATE**.  There are always multiple ways
 to design a DFA.
 
 ```python
@@ -713,8 +713,8 @@ class State5(State):
 # End of class State5
 ```
 
-- The logic we added here is almost identical to State3 (INVALID_EMAIL_STATE)
-- If within permitted errors, just loop back to DATA_STATE and repeats
+- The logic we added here is almost identical to State3 (**INVALID_EMAIL_STATE**)
+- If within permitted errors, just loop back to **DATA_STATE** and repeats
 
 #### State6: LOG_STATE
 
@@ -742,11 +742,11 @@ class State6(State):
 # End of class State6
 ```
 
-- file is opened in 'a' APPEND mode, to ensure we collect logs, not overwrite
+- file is opened in 'a' *APPEND* mode, to ensure we collect logs, not overwrite
 them
 - file is opened with '+' modifier to create it if it doesn't exist
 - once we have written out the file, we are done.  Transition automatically
-to TERMINATION_STATE
+to **TERMINATION_STATE**
 
 #### State7: TERMINATION_STATE
 
@@ -769,8 +769,8 @@ class State7(State):
 # End of class State7
 ```
 
-- That's it!  We've mapped the entire FSM MUD Diagram into coded states with
-transitions.  We shoud now have a functional state machine.
+- **That's it!**  We've mapped the entire FSM MUD Diagram into coded states with
+transitions.  We should now have a functional state machine.
 - run the **mud.py** program to test our logic
 
 #### Execution
@@ -778,6 +778,8 @@ transitions.  We shoud now have a functional state machine.
 Here's some example output (with intentional errors):
 
 ```text
+> python mud.py
+
 HELLO "Respond with email"
 > Sultaneous
 Invalid email, error number 1 of 3.
@@ -812,7 +814,6 @@ Some notes:
 - State machines are powerful methods of design and implementation
 - State machines are not useful for all computer science applications
 - State machines can be used in a vast number of scenarios
-
 - The fsm module is a fast and painless way to make state machines of varying 
 complexity
 - An FSM diagram is an essential design tool for laying out your machine
@@ -822,9 +823,8 @@ complexity
 machine for you
 - The *fsm-gen* utility script will autogenerate a code template for you,
 preparing scaffolding for your logic
-
 - The workshop tutorial takes you through the proposal, design, diagramming, and
-implementation of an FSM example, showing how easy using the fsm module can be
+implementation of an FSM example, showing how easy using the fsm module can be!
 
 - FSM's are fun, powerful, and automated.
 
