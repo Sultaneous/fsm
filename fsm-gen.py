@@ -33,6 +33,10 @@ argv=sys.argv
 argc=(len(argv))
 '''
 
+states='''
+states={}
+'''
+
 syntax='''
 def showSyntax():
    print("{} by {}, {}")
@@ -236,6 +240,15 @@ def generateTemplate(responses):
    # Write out command line parameters imports and args
    if (responses["hasCLParameters"]):
       outfile.write(clparameters)
+
+   # Build statename dictionary (maps state name ==> class name)
+   # Alternate way to set next state, by name instead of class name
+   outfile.write(states)
+   fmt="states[\"{}\"] = {}"
+   for i in range(responses["numStates"]):
+      outfile.write(str.format(fmt, responses['stateNames'][i],
+                                    "\"State"+str(i+1)+"\"\n"))      
+   
 
    # Write the showSyntax() function
    if (responses["hasSyntax"]):
