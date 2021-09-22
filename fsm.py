@@ -20,12 +20,41 @@ class Context():
       self.name = contextName
       self.__dict = dict()
       self.__nextState = None
+      self.__iterator = None      
 
       # Decorators
       self.push=self.set
       self.put=self.set
       self.peek=self.get
       self.pop=self.get
+
+   # Overriding base object function
+   def __len__(self):
+      return (self.count()) 
+
+   # Overriding base object function
+   def __str__(self):
+      return self.getAll()
+
+   # Iter() + next() implements iterative protocol.
+   # So one can do: for i in context
+   # __iter__ must return an iterative object
+   def __iter__(self):
+      return self
+
+   # __next__ must return a value if available, or raise StopIteration
+   # we iterate through the dictionary keys, and return a (k,v) tuple.
+   def __next__(self):
+      if (self.__iterator==None):
+         self.__iterator=self.__dict.keys().__iter__()
+         t=()
+      try:
+         k=self.__iterator.__next__()
+         t=(k, self.__dict[k])
+      except StopIteration:
+         self._iterator = None
+         raise StopIteration
+      return (t)
 
    def setNextState(self, className):
       if (className==""):
