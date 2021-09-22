@@ -210,16 +210,17 @@ def produceSummary(responses):
    report+="\n"
    print(report)
 
-   # Save report
-   file = open(responses["outfile"]+".report", "w+")
-   file.write(report)
-   file.close()
-
    print("I am now ready to generate a python code template.")
    if not prompt("Do you wish me to begin? ", ['y','n'], 'y', 'y'):
       if not prompt("Are you sure?  All entries will be lost! ", ['y','n'], 'n', 'n'):
          print("OK. Goodbye.")
          exit()
+
+   # Save report
+   file = open(responses["outfile"]+".report", "w+")
+   file.write(report)
+   file.close()
+
 # End of produceSummary
 
 
