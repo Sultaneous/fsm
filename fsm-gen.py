@@ -208,7 +208,7 @@ def produceSummary(responses):
    report+=f"Requires use of command line parameters: {responses['hasCLParameters']}\n"
    report+=f"Show usage syntax when no parameters: {responses['hasSyntax']}\n"
    report+="\n"
-   print(report)
+   print(report, end='')
 
    print("I am now ready to generate a python code template.")
    if not prompt("Do you wish me to begin? ", ['y','n'], 'y', 'y'):
