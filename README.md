@@ -190,6 +190,36 @@ of properties.
 | `count()` | None | None | int numProperties | Returns the number of properties in the context dictionary. Executes *`len(self.__dict`)*. |
 | `exists()` | None | string key | boolean doesExist | True if key exists, False otherwise. **NOTE**: Returns True if key exists and value is *None*. |
 
+**NOTE:**
+- Context also supports len(); len(context) will return the number of properties stored.
+- Context also supports str(); str(context) will return a JSON representation of the object.
+- Context also supports iteration; for t in context will return a tuple of key=value in the order submitted
+
+```python
+from fsm import Context
+
+context = Context("Test")
+context.push ("item", "one")
+context.push ("red", "dwarf")
+context.push ("blue", "elf")
+
+>>> print (len(context))
+3
+
+>>> print str(context)
+{
+   'item': 'one',
+   'red': 'dwarf',
+   'blue': 'elf'
+}
+
+>>> for t in context:
+...    print(t)
+('item', 'one')
+('red', 'dwarf')
+('blue', 'elf')
+```
+
 ### <a id="info_StateClass">State Class</a>
 
 The **State Class** is the base class you must:
@@ -825,6 +855,5 @@ machine for you
 preparing scaffolding for your logic
 - The workshop tutorial takes you through the proposal, design, diagramming, and
 implementation of an FSM example, showing how easy using the fsm module can be!
-
 - FSM's are fun, powerful, and automated.
 
